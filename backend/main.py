@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 import pandas as pd
 
+
+
 app = FastAPI()
 
 # Cargar datos
@@ -30,3 +32,13 @@ def total_revenue():
 @app.get("/kpi/units")
 def total_units():
     return {"units_sold": df["units_sold"].sum()}
+
+    from fastapi.middleware.cors import CORSMiddleware
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
