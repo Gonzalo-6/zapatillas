@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import Chart from "./Chart";
 
 function Dashboard() {
   const [data, setData] = useState([]);

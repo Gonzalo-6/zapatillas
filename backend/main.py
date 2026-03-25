@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
 
 
@@ -42,3 +43,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+@app.get("/group/brand")
+def revenue_by_brand():
+    grouped = df.groupby("brand")["revenue_usd"].sum().reset_index()
+    return grouped.to_dict(orient="records")
