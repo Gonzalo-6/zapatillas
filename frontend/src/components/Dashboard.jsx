@@ -5,6 +5,8 @@ import Chart from "./Chart";
 function Dashboard() {
   const [data, setData] = useState([]);
   const [revenue, setRevenue] = useState(0);
+  const [chartData, setChartData] = useState([]);
+  
 
   useEffect(() => {
     axios.get("http://127.0.0.1:8000/data")
@@ -12,13 +14,26 @@ function Dashboard() {
 
     axios.get("http://127.0.0.1:8000/kpi/revenue")
       .then(res => setRevenue(res.data.total_revenue));
+
+    axios.get("http://127.0.0.1:8000/group/brand")
+      .then(res => setChartData(res.data));  
   }, []);
 
   return (
-    <div>
-      <h2>💰 Revenue Total: {revenue}</h2>
+    <div className="container">
 
-      <table border="1">
+  <div className="kpis">
+    <div className="card">💰 Revenue Total: {revenue}</div>
+    <div className="card">📦 Ventas: {data.length}</div>
+  </div>
+
+  {/* GRÁFICO */}
+  <h3>📊 Revenue por Marca</h3>
+  <div className="charts">
+    <Chart data={chartData} />
+  </div>
+
+      <table>
         <thead>
           <tr>
             <th>Marca</th>
