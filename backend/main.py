@@ -48,3 +48,15 @@ app.add_middleware(
 def revenue_by_brand():
     grouped = df.groupby("brand")["revenue_usd"].sum().reset_index()
     return grouped.to_dict(orient="records")
+
+@app.get("/filter")
+def filter_data(brand: str = None, country: str = None):
+    filtered = df
+
+    if brand:
+        filtered = filtered[filtered["brand"] == brand]
+
+    if country:
+        filtered = filtered[filtered["country"] == country]
+
+    return filtered.to_dict(orient="records")
