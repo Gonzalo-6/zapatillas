@@ -39,10 +39,16 @@ h1 {
 /* GRÁFICOS */
 .charts {
   display: flex;
-  gap: 40px;
+  gap: 30px;
   margin-bottom: 30px;
   justify-content: center;
   flex-wrap: wrap;
+}
+.charts{
+  background:#1e293b;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
 }
 
 /* TABLA */

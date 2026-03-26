@@ -12,21 +12,23 @@ function Dashboard() {
   const [chartData, setChartData] = useState([]);
   const [brands, setBrands] = useState([]);
   const [countries, setCountries] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  // 🔥 CARGA INICIAL
   useEffect(() => {
     axios.get("http://127.0.0.1:8000/data")
       .then(res => {
         setData(res.data);
 
-        // KPI inicial
+        // KPI
         const total = res.data.reduce((acc, item) => acc + item.revenue_usd, 0);
         setRevenue(total);
 
-        // gráfico inicial
+        // gráfico por categoría
         const grouped = Object.values(
           res.data.reduce((acc, item) => {
-            acc[item.brand] = acc[item.brand] || { brand: item.brand, revenue_usd: 0 };
-            acc[item.brand].revenue_usd += item.revenue_usd;
+            acc[item.category] = acc[item.category] || { category: item.category, revenue_usd: 0 };
+            acc[item.category].revenue_usd += item.revenue_usd;
             return acc;
           }, {})
         );
@@ -38,19 +40,18 @@ function Dashboard() {
 
         setBrands(uniqueBrands);
         setCountries(uniqueCountries);
+
+        setLoading(false);
       });
   }, []);
 
-  useEffect(() => {
-  console.log(countries);
-}, [countries]);
-
-  // 🔥 AHORA SÍ: dentro del componente
+  // 🔥 FILTROS
   const handleFilter = (type, value) => {
     let url = "http://127.0.0.1:8000/filter?";
 
-    if (type === "brand") url += `brand=${value}`;
-    if (type === "country") url += `country=${value}`;
+    if (value) {
+      url += `${type}=${value}`;
+    }
 
     axios.get(url).then(res => {
       setData(res.data);
@@ -66,37 +67,75 @@ function Dashboard() {
           acc[item.category].revenue_usd += item.revenue_usd;
           return acc;
         }, {})
-    );
+      );
 
       setChartData(grouped);
     });
   };
 
+  // 🔥 FORMATO DINERO
+  const formatMoney = (value) => {
+    return value.toLocaleString("es-ES", {
+      style: "currency",
+      currency: "EUR",
+      minimumFractionDigits: 0
+    });
+  };
+
+  // 🔥 LOADING
+  if (loading) {
+    return <h2>⏳ Cargando datos...</h2>;
+  }
+
+  if (data.length === 0) {
+    return <h2>⚠️ No hay datos disponibles</h2>;
+  }
+
   return (
     <div className="container">
 
+      {/* KPIs */}
       <div className="kpis">
-        <div className="card">💰 Ingresos Total: {formatMoney(revenue)}</div>
+        <div className="card">💰 Ingresos Totales: {formatMoney(revenue)}</div>
         <div className="card">📦 Ventas: {data.length}</div>
       </div>
 
+      {/* FILTROS */}
       <Filters 
         brands={brands} 
         countries={countries} 
         onFilter={handleFilter} 
       />
 
-      <h3>📊 Ingresos por Marca</h3>
+      <h3>📊 Análisis de ventas</h3>
 
+      {/* GRÁFICOS FILA 1 */}
       <div className="charts">
-        <Chart data={chartData} />
-        <GenderChart data={data} />
+        <div>
+          <h4>Por Categoría</h4>
+          <Chart data={chartData} />
+        </div>
+
+        <div>
+          <h4>Por Género</h4>
+          <GenderChart data={data} />
+        </div>
       </div>
 
+      {/* GRÁFICOS FILA 2 */}
       <div className="charts">
-        <ChannelChart data={data} />
-        <PaymentChart data={data} />
+        <div>
+          <h4>Canal de Venta</h4>
+          <ChannelChart data={data} />
+        </div>
+
+        <div>
+          <h4>Método de Pago</h4>
+          <PaymentChart data={data} />
+        </div>
       </div>
+
+      {/* TABLA */}
       <table>
         <thead>
           <tr>
@@ -119,12 +158,5 @@ function Dashboard() {
     </div>
   );
 }
-const formatMoney = (value) => {
-  return value.toLocaleString("es-ES", {
-    style: "currency",
-    currency: "EUR"
-  });
-};
 
 export default Dashboard;
-

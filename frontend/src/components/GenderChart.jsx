@@ -12,10 +12,15 @@ function GenderChart({ data }) {
 
   return (
     <PieChart width={300} height={300}>
-      <Pie data={grouped} dataKey="value" nameKey="gender" />
+      <Pie 
+        data={grouped} 
+        dataKey="value" 
+        nameKey="gender"
+        fill="#8884d8"/>
       <Tooltip />
     </PieChart>
   );
 }
+
 
 export default GenderChart;

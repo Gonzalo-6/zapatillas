@@ -12,10 +12,15 @@ function ChannelChart({ data }) {
 
   return (
     <PieChart width={300} height={300}>
-      <Pie data={grouped} dataKey="value" nameKey="name" />
+      <Pie 
+        data={grouped} 
+        dataKey="value" 
+        nameKey="name"
+        fill="#82ca9d"/>
       <Tooltip />
     </PieChart>
   );
 }
+
 
 export default ChannelChart;
