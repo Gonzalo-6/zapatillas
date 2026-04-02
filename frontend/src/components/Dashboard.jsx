@@ -5,6 +5,7 @@ import Filters from "./Filters";
 import GenderChart from "./GenderChart";
 import ChannelChart from "./ChannelChart";
 import PaymentChart from "./PaymentChart";
+import TimeChart from "./TimeChart";
 
 function Dashboard() {
   const [data, setData] = useState([]);
