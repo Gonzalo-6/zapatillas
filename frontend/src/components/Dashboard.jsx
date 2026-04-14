@@ -17,7 +17,7 @@ function Dashboard() {
 
   // 🔥 CARGA INICIAL
   useEffect(() => {
-    axios.get("http://127.0.0.1:8000/data")
+    axios.get("/api/data")
       .then(res => {
         setData(res.data);
 
@@ -48,7 +48,7 @@ function Dashboard() {
 
   // 🔥 FILTROS
   const handleFilter = (type, value) => {
-    let url = "http://127.0.0.1:8000/filter?";
+    let url = "/api/filter?";
 
     if (value) {
       url += `${type}=${value}`;

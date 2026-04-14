@@ -24,6 +24,7 @@ function ChannelChart({ data }) {
   if (!data || data.length === 0) return null;
 
   return (
+    
     <PieChart width={300} height={300}>
       <Pie 
         data={grouped} 
@@ -38,6 +39,7 @@ function ChannelChart({ data }) {
 
       <Tooltip formatter={(value) => `${value} ventas`} />
     </PieChart>
+    
   );
 }
 
